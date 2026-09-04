@@ -120,4 +120,25 @@
   "cat_health": "الصحة",
   "cat_education": "التعليم",
   "cat_other": "أخرى"
+  
+"nav_debts": "الديون",
+"debts": "الديون",
+"debts_subtitle": "تتبع ما تدين به وما هو مستحق لك.",
+"your_debts": "ديونك",
+"add_debt": "إضافة دين",
+"you_owe": "أنت مدين",
+"owed_to_you": "مستحق لك",
+"net_balance": "الرصيد الصافي",
+"all": "الكل",
+"person_name": "الشخص / الجهة",
+"debt_type": "النوع",
+"type_owe": "أنا مدين لهم",
+"type_owed": "هم مدينون لي",
+"due_date_optional": "تاريخ الاستحقاق (اختياري)",
+"note_optional": "ملاحظة (اختياري)",
+"record_payment": "تسجيل دفعة",
+"payment_amount_prompt": "مبلغ الدفعة",
+"settled": "مسددة",
+"due": "الاستحقاق",
+"no_debts": "لا توجد ديون بعد. أضف واحدًا للبدء."
 }
