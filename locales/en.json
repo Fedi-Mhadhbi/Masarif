@@ -119,45 +119,26 @@
   "cat_entertainment": "Entertainment",
   "cat_health": "Health",
   "cat_education": "Education",
-  "cat_other": "Other"
+  "cat_other": "Other",
 
   "nav_debts": "Debts",
-
-"debts": "Debts",
-
-"debts_subtitle": "Track what you owe and what's owed to you.",
-
-"your_debts": "Your Debts",
-
-"add_debt": "Add Debt",
-
-"you_owe": "You Owe",
-
-"owed_to_you": "Owed to You",
-
-"net_balance": "Net Balance",
-
-"all": "All",
-
-"person_name": "Person / Institution",
-
-"debt_type": "Type",
-
-"type_owe": "I owe them",
-
-"type_owed": "They owe me",
-
-"due_date_optional": "Due Date (optional)",
-
-"note_optional": "Note (optional)",
-
-"record_payment": "Record Payment",
-
-"payment_amount_prompt": "Payment amount",
-
-"settled": "Settled",
-
-"due": "Due",
-
-"no_debts": "No debts yet. Add one to start tracking."
+  "debts": "Debts",
+  "debts_subtitle": "Track what you owe and what's owed to you.",
+  "your_debts": "Your Debts",
+  "add_debt": "Add Debt",
+  "you_owe": "You Owe",
+  "owed_to_you": "Owed to You",
+  "net_balance": "Net Balance",
+  "all": "All",
+  "person_name": "Person / Institution",
+  "debt_type": "Type",
+  "type_owe": "I owe them",
+  "type_owed": "They owe me",
+  "due_date_optional": "Due Date (optional)",
+  "note_optional": "Note (optional)",
+  "record_payment": "Record Payment",
+  "payment_amount_prompt": "Payment amount",
+  "settled": "Settled",
+  "due": "Due",
+  "no_debts": "No debts yet. Add one to start tracking."
 }
