@@ -37,15 +37,39 @@ export async function loadLanguage(language) {
         console.error("Failed to load language:", error);
 
         if (language !== "en") {
-            const response = await fetch("locales/en.json");
-            dictionary = await response.json();
 
-            currentLanguage = "en";
+            try {
 
-            document.documentElement.lang = "en";
-            document.documentElement.dir = "ltr";
+                const response =
+                    await fetch("locales/en.json");
 
-            applyTranslations();
+                dictionary = await response.json();
+
+                currentLanguage = "en";
+
+                document.documentElement.lang = "en";
+                document.documentElement.dir = "ltr";
+
+                applyTranslations();
+
+            } catch (fallbackError) {
+
+                console.error(
+                    "Failed to load fallback language:",
+                    fallbackError
+                );
+
+                /*
+                 * Both the requested language file and the
+                 * English fallback failed to load/parse.
+                 * Don't throw — t() already falls back to
+                 * returning the raw key, so the rest of the
+                 * app (including login) keeps working with
+                 * untranslated text instead of crashing.
+                 */
+
+            }
+
         }
     }
 }
