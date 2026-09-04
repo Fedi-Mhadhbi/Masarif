@@ -120,4 +120,25 @@
   "cat_health": "Santé",
   "cat_education": "Éducation",
   "cat_other": "Autre"
+
+"nav_debts": "Dettes",
+"debts": "Dettes",
+"debts_subtitle": "Suivez ce que vous devez et ce qu'on vous doit.",
+"your_debts": "Vos dettes",
+"add_debt": "Ajouter une dette",
+"you_owe": "Vous devez",
+"owed_to_you": "On vous doit",
+"net_balance": "Solde net",
+"all": "Tous",
+"person_name": "Personne / Institution",
+"debt_type": "Type",
+"type_owe": "Je leur dois",
+"type_owed": "Ils me doivent",
+"due_date_optional": "Date d'échéance (optionnel)",
+"note_optional": "Note (optionnel)",
+"record_payment": "Enregistrer un paiement",
+"payment_amount_prompt": "Montant du paiement",
+"settled": "Réglée",
+"due": "Échéance",
+"no_debts": "Aucune dette pour l'instant. Ajoutez-en une pour commencer."
 }
