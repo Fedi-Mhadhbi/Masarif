@@ -1401,3 +1401,104 @@ a {
 .offline-banner.show {
     transform: translateY(0);
 }
+
+
+/* =========================================================
+   DEBTS
+   ========================================================= */
+
+.debt-summary {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.summary-item {
+    background: #f7f8fc;
+
+    border-radius: 14px;
+
+    padding: 16px;
+}
+
+.summary-amount {
+    font-size: 22px;
+
+    font-weight: 800;
+
+    margin-top: 5px;
+}
+
+.badge {
+    display: inline-block;
+
+    width: fit-content;
+
+    padding: 4px 10px;
+
+    border-radius: 99px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.badge-owe {
+    background: #fff0f2;
+    color: var(--danger);
+}
+
+.badge-owed {
+    background: #eafaf3;
+    color: var(--success);
+}
+
+.tabs {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 16px;
+}
+
+.tab-btn {
+    border: 1px solid var(--border);
+
+    background: white;
+
+    color: var(--muted);
+
+    border-radius: 99px;
+
+    padding: 8px 15px;
+
+    font-size: 13px;
+
+    font-weight: 650;
+}
+
+.tab-btn.active {
+    background: var(--primary);
+
+    border-color: var(--primary);
+
+    color: white;
+}
+
+.debt-card {
+    display: grid;
+
+    gap: 10px;
+}
+
+@media (max-width: 480px) {
+
+    .debt-summary {
+        grid-template-columns: 1fr;
+    }
+
+}
