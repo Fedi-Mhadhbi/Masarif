@@ -1,4 +1,4 @@
-const CACHE_NAME = "mizan-v1";
+const CACHE_NAME = "mizan-v2";
 
 const FILES_TO_CACHE = [
     "./",
@@ -9,6 +9,7 @@ const FILES_TO_CACHE = [
     "./transactions.html",
     "./budget.html",
     "./goals.html",
+    "./debts.html",
     "./settings.html",
 
     "./manifest.json",
@@ -21,6 +22,7 @@ const FILES_TO_CACHE = [
     "./js/transactions.js",
     "./js/budget.js",
     "./js/goals.js",
+    "./js/debts.js",
     "./js/settings.js",
     "./js/i18n.js",
     "./js/common.js",
