@@ -242,6 +242,12 @@ export function buildShell(
         ],
 
         [
+            "debts.html",
+            "🤝",
+            "nav_debts"
+        ],
+
+        [
             "settings.html",
             "⚙️",
             "nav_settings"
