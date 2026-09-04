@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#5b5bd6">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Masarif">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+    <title>Finance — Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="auth-page">
+
+<main class="auth-shell">
+
+    <section class="auth-card">
+
+        <div class="brand brand-center">
+            <span class="brand-mark">₣</span>
+            <span>Finance</span>
+        </div>
+
+        <h1 data-i18n="login_title">Welcome back</h1>
+
+        <p class="muted" data-i18n="login_subtitle">
+            Sign in to manage your money.
+        </p>
+
+        <form id="loginForm" class="form">
+
+            <label data-i18n="email">Email</label>
+
+            <input
+                id="loginEmail"
+                type="email"
+                autocomplete="email"
+                required
+            >
+
+            <label data-i18n="password">Password</label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                class="btn btn-primary full"
+                type="submit"
+                data-i18n="login"
+            >
+                Login
+            </button>
+
+            <p id="loginError" class="form-error"></p>
+
+        </form>
+
+        <p class="auth-link">
+
+            <span data-i18n="no_account">
+                Don't have an account?
+            </span>
+
+            <a href="register.html" data-i18n="register">
+                Create account
+            </a>
+
+        </p>
+
+        <div class="language-row">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+            <button class="lang-btn" data-lang="ar">AR</button>
+        </div>
+
+    </section>
+
+</main>
+
+<script type="module" src="js/auth.js"></script>
+
+</body>
+</html>
