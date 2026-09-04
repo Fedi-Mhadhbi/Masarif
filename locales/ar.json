@@ -1,0 +1,123 @@
+{
+  "login_title": "مرحباً بعودتك",
+  "login_subtitle": "سجّل الدخول لإدارة أموالك.",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "login": "تسجيل الدخول",
+  "no_account": "ليس لديك حساب؟",
+  "register": "إنشاء حساب",
+
+  "register_title": "إنشاء حسابك",
+  "register_subtitle": "ابدأ في تنظيم أموالك.",
+  "name": "الاسم",
+  "have_account": "لديك حساب بالفعل؟",
+
+  "dashboard": "لوحة التحكم",
+
+  "nav_dashboard": "لوحة التحكم",
+  "nav_transactions": "المعاملات",
+  "nav_budget": "الميزانيات",
+  "nav_goals": "أهداف الادخار",
+  "nav_settings": "الإعدادات",
+  "logout": "تسجيل الخروج",
+
+  "income": "الدخل",
+  "expenses": "المصاريف",
+  "balance": "الرصيد",
+  "savings": "المتاح",
+
+  "spending_overview": "نظرة على المصاريف",
+  "view_all": "عرض الكل",
+
+  "financial_health": "الصحة المالية",
+  "health_good": "جيدة",
+  "health_ok": "مقبولة",
+  "health_attention": "تحتاج إلى تحسين",
+  "health_explanation": "بناءً على دخلك ومصاريفك وميزانياتك وأهدافك.",
+
+  "recent_transactions": "آخر المعاملات",
+  "add_expense": "إضافة مصروف",
+  "no_transactions": "لا توجد معاملات هذا الشهر.",
+
+  "spending_insights": "تحليلات المصاريف",
+
+  "savings_goals": "أهداف الادخار",
+  "manage_goals": "إدارة الأهداف",
+  "no_goals": "لا توجد أهداف ادخار بعد.",
+
+  "insight_add_income": "أضف دخلك",
+  "insight_add_income_text": "أضف معاملة دخل لبدء قياس صحتك المالية.",
+
+  "insight_over_income": "المصاريف أعلى من الدخل",
+  "insight_over_income_text": "مصاريفك الحالية تتجاوز الدخل المسجل.",
+
+  "insight_balance": "لديك رصيد متبقٍ",
+  "insight_balance_text": "رصيدك الشهري الحالي هو",
+
+  "insight_top_category": "أكبر فئة إنفاق",
+
+  "insight_budget": "تجاوز الميزانية",
+  "insight_budget_text": "تجاوزت ميزانيتها الشهرية",
+
+  "insight_goals": "تقدم الأهداف",
+  "insight_goals_text": "أهداف مكتملة",
+
+  "no_chart_data": "لا توجد بيانات مصاريف بعد.",
+
+  "transactions": "المعاملات",
+  "transactions_subtitle": "سجّل كل دخل ومصروف.",
+  "this_month": "هذا الشهر",
+  "add_transaction": "إضافة معاملة",
+
+  "all_types": "كل الأنواع",
+  "all_categories": "كل الفئات",
+
+  "date": "التاريخ",
+  "description": "الوصف",
+  "category": "الفئة",
+  "type": "النوع",
+  "amount": "المبلغ",
+
+  "expense": "مصروف",
+
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "confirm_delete": "هل تريد حذف هذه المعاملة؟",
+
+  "budgets": "الميزانيات",
+  "budget_subtitle": "حدد حدوداً لمصاريفك الشهرية.",
+  "monthly_budgets": "الميزانيات الشهرية",
+  "add_budget": "إضافة ميزانية",
+  "remaining": "متبقٍ",
+  "no_budgets": "لا توجد ميزانيات لهذا الشهر.",
+
+  "goal_subtitle": "ادخر من أجل الأشياء المهمة بالنسبة لك.",
+  "your_goals": "أهدافك",
+  "add_goal": "إضافة هدف",
+  "goal_name": "اسم الهدف",
+  "target_amount": "المبلغ المستهدف",
+  "current_amount": "المبلغ الحالي",
+  "target_date": "التاريخ المستهدف",
+  "complete": "مكتمل",
+  "target": "الهدف",
+  "add_saving": "إضافة ادخار",
+  "saving_amount": "كم تريد أن تضيف؟",
+
+  "settings": "الإعدادات",
+  "settings_subtitle": "إدارة تفضيلاتك.",
+  "language": "اللغة",
+  "language_desc": "اختر لغة التطبيق.",
+  "account": "الحساب",
+  "danger_zone": "إجراءات الحساب",
+  "logout_desc": "تسجيل الخروج من هذا الحساب.",
+
+  "cat_food": "الطعام",
+  "cat_housing": "السكن",
+  "cat_transport": "النقل",
+  "cat_bills": "الفواتير",
+  "cat_shopping": "التسوق",
+  "cat_entertainment": "الترفيه",
+  "cat_health": "الصحة",
+  "cat_education": "التعليم",
+  "cat_other": "أخرى"
+}

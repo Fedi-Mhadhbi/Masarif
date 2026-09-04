@@ -1,0 +1,123 @@
+{
+  "login_title": "Welcome back",
+  "login_subtitle": "Sign in to manage your money.",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "no_account": "Don't have an account?",
+  "register": "Create account",
+
+  "register_title": "Create your account",
+  "register_subtitle": "Start taking control of your money.",
+  "name": "Name",
+  "have_account": "Already have an account?",
+
+  "dashboard": "Dashboard",
+
+  "nav_dashboard": "Dashboard",
+  "nav_transactions": "Transactions",
+  "nav_budget": "Budgets",
+  "nav_goals": "Savings Goals",
+  "nav_settings": "Settings",
+  "logout": "Logout",
+
+  "income": "Income",
+  "expenses": "Expenses",
+  "balance": "Balance",
+  "savings": "Available",
+
+  "spending_overview": "Spending Overview",
+  "view_all": "View all",
+
+  "financial_health": "Financial Health",
+  "health_good": "Good",
+  "health_ok": "Okay",
+  "health_attention": "Needs attention",
+  "health_explanation": "Based on your income, spending, budgets and goals.",
+
+  "recent_transactions": "Recent Transactions",
+  "add_expense": "Add expense",
+  "no_transactions": "No transactions this month.",
+
+  "spending_insights": "Spending Insights",
+
+  "savings_goals": "Savings Goals",
+  "manage_goals": "Manage goals",
+  "no_goals": "No savings goals yet.",
+
+  "insight_add_income": "Add your income",
+  "insight_add_income_text": "Add an income transaction to start measuring your financial health.",
+
+  "insight_over_income": "Spending is above income",
+  "insight_over_income_text": "Your expenses currently exceed your recorded income.",
+
+  "insight_balance": "You have money remaining",
+  "insight_balance_text": "Your current monthly balance is",
+
+  "insight_top_category": "Top spending category",
+
+  "insight_budget": "Budget exceeded",
+  "insight_budget_text": "has exceeded its monthly budget",
+
+  "insight_goals": "Goal progress",
+  "insight_goals_text": "goals completed",
+
+  "no_chart_data": "No expense data yet.",
+
+  "transactions": "Transactions",
+  "transactions_subtitle": "Track every income and expense.",
+  "this_month": "This month",
+  "add_transaction": "Add transaction",
+
+  "all_types": "All types",
+  "all_categories": "All categories",
+
+  "date": "Date",
+  "description": "Description",
+  "category": "Category",
+  "type": "Type",
+  "amount": "Amount",
+
+  "expense": "Expense",
+
+  "cancel": "Cancel",
+  "save": "Save",
+  "confirm_delete": "Delete this transaction?",
+
+  "budgets": "Budgets",
+  "budget_subtitle": "Set limits for your monthly spending.",
+  "monthly_budgets": "Monthly Budgets",
+  "add_budget": "Add budget",
+  "remaining": "remaining",
+  "no_budgets": "No budgets for this month.",
+
+  "goal_subtitle": "Save toward the things that matter to you.",
+  "your_goals": "Your Goals",
+  "add_goal": "Add goal",
+  "goal_name": "Goal name",
+  "target_amount": "Target amount",
+  "current_amount": "Current amount",
+  "target_date": "Target date",
+  "complete": "complete",
+  "target": "Target",
+  "add_saving": "Add saving",
+  "saving_amount": "How much do you want to add?",
+
+  "settings": "Settings",
+  "settings_subtitle": "Manage your preferences.",
+  "language": "Language",
+  "language_desc": "Choose the language used by the app.",
+  "account": "Account",
+  "danger_zone": "Account actions",
+  "logout_desc": "Sign out of this account.",
+
+  "cat_food": "Food",
+  "cat_housing": "Housing",
+  "cat_transport": "Transport",
+  "cat_bills": "Bills",
+  "cat_shopping": "Shopping",
+  "cat_entertainment": "Entertainment",
+  "cat_health": "Health",
+  "cat_education": "Education",
+  "cat_other": "Other"
+}

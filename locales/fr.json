@@ -1,0 +1,123 @@
+{
+  "login_title": "Bon retour",
+  "login_subtitle": "Connectez-vous pour gérer votre argent.",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "login": "Connexion",
+  "no_account": "Vous n'avez pas de compte ?",
+  "register": "Créer un compte",
+
+  "register_title": "Créer votre compte",
+  "register_subtitle": "Commencez à mieux gérer votre argent.",
+  "name": "Nom",
+  "have_account": "Vous avez déjà un compte ?",
+
+  "dashboard": "Tableau de bord",
+
+  "nav_dashboard": "Tableau de bord",
+  "nav_transactions": "Transactions",
+  "nav_budget": "Budgets",
+  "nav_goals": "Objectifs d'épargne",
+  "nav_settings": "Paramètres",
+  "logout": "Déconnexion",
+
+  "income": "Revenus",
+  "expenses": "Dépenses",
+  "balance": "Solde",
+  "savings": "Disponible",
+
+  "spending_overview": "Vue des dépenses",
+  "view_all": "Tout voir",
+
+  "financial_health": "Santé financière",
+  "health_good": "Bonne",
+  "health_ok": "Correcte",
+  "health_attention": "À améliorer",
+  "health_explanation": "Basée sur vos revenus, dépenses, budgets et objectifs.",
+
+  "recent_transactions": "Transactions récentes",
+  "add_expense": "Ajouter une dépense",
+  "no_transactions": "Aucune transaction ce mois-ci.",
+
+  "spending_insights": "Insights de dépenses",
+
+  "savings_goals": "Objectifs d'épargne",
+  "manage_goals": "Gérer les objectifs",
+  "no_goals": "Aucun objectif d'épargne.",
+
+  "insight_add_income": "Ajoutez vos revenus",
+  "insight_add_income_text": "Ajoutez un revenu pour commencer à mesurer votre santé financière.",
+
+  "insight_over_income": "Les dépenses dépassent les revenus",
+  "insight_over_income_text": "Vos dépenses dépassent actuellement vos revenus enregistrés.",
+
+  "insight_balance": "Il vous reste de l'argent",
+  "insight_balance_text": "Votre solde mensuel actuel est de",
+
+  "insight_top_category": "Catégorie principale",
+
+  "insight_budget": "Budget dépassé",
+  "insight_budget_text": "a dépassé son budget mensuel",
+
+  "insight_goals": "Progression des objectifs",
+  "insight_goals_text": "objectifs terminés",
+
+  "no_chart_data": "Pas encore de données.",
+
+  "transactions": "Transactions",
+  "transactions_subtitle": "Suivez chaque revenu et chaque dépense.",
+  "this_month": "Ce mois-ci",
+  "add_transaction": "Ajouter une transaction",
+
+  "all_types": "Tous les types",
+  "all_categories": "Toutes les catégories",
+
+  "date": "Date",
+  "description": "Description",
+  "category": "Catégorie",
+  "type": "Type",
+  "amount": "Montant",
+
+  "expense": "Dépense",
+
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "confirm_delete": "Supprimer cette transaction ?",
+
+  "budgets": "Budgets",
+  "budget_subtitle": "Fixez des limites pour vos dépenses mensuelles.",
+  "monthly_budgets": "Budgets mensuels",
+  "add_budget": "Ajouter un budget",
+  "remaining": "restant",
+  "no_budgets": "Aucun budget pour ce mois.",
+
+  "goal_subtitle": "Épargnez pour ce qui compte pour vous.",
+  "your_goals": "Vos objectifs",
+  "add_goal": "Ajouter un objectif",
+  "goal_name": "Nom de l'objectif",
+  "target_amount": "Montant cible",
+  "current_amount": "Montant actuel",
+  "target_date": "Date cible",
+  "complete": "terminé",
+  "target": "Cible",
+  "add_saving": "Ajouter une épargne",
+  "saving_amount": "Combien voulez-vous ajouter ?",
+
+  "settings": "Paramètres",
+  "settings_subtitle": "Gérez vos préférences.",
+  "language": "Langue",
+  "language_desc": "Choisissez la langue de l'application.",
+  "account": "Compte",
+  "danger_zone": "Actions du compte",
+  "logout_desc": "Se déconnecter de ce compte.",
+
+  "cat_food": "Alimentation",
+  "cat_housing": "Logement",
+  "cat_transport": "Transport",
+  "cat_bills": "Factures",
+  "cat_shopping": "Achats",
+  "cat_entertainment": "Loisirs",
+  "cat_health": "Santé",
+  "cat_education": "Éducation",
+  "cat_other": "Autre"
+}
