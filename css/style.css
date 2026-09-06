@@ -704,7 +704,7 @@ a {
 
     place-items: center;
 
-    z-index: 20;
+    z-index: 2000;
 
     padding: 20px;
 }
@@ -1068,20 +1068,19 @@ a {
        ------------------------- */
 
     .modal {
-        padding: 12px;
-    }
-
-
-    .modal-content {
         width: 100%;
 
         max-width: 100%;
 
-        max-height: 90vh;
+        max-height: calc(
+            100vh - 130px - env(safe-area-inset-bottom, 0px)
+        );
 
         overflow-y: auto;
 
         border-radius: 16px;
+
+        padding: 12px;
     }
 
 
@@ -1304,14 +1303,9 @@ a {
        ------------------------- */
 
     .modal {
-        padding: 8px;
-    }
-
-
-    .modal-content {
         border-radius: 14px;
 
-        padding: 16px;
+        padding: 8px;
     }
 
 
@@ -1501,4 +1495,21 @@ a {
         grid-template-columns: 1fr;
     }
 
+}
+
+
+/* =========================================================
+   CARD ACTION BUTTONS (edit/delete pairs)
+   ========================================================= */
+
+.card-actions {
+    display: flex;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.card-actions .btn {
+    padding: 6px 10px;
 }
