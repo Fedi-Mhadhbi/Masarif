@@ -33,6 +33,13 @@ const { t } =
 
 let activeFilter = "all";
 
+/*
+ * null when adding a new debt, otherwise the id of the
+ * debt currently being edited.
+ */
+
+let editingId = null;
+
 
 authGuard(
     async user => {
@@ -149,12 +156,23 @@ function debtCard(debt, t) {
                 </strong>
 
 
-                <button
-                    class="btn btn-danger del-debt"
-                    data-id="${debt.id}"
-                >
-                    ×
-                </button>
+                <div class="card-actions">
+
+                    <button
+                        class="btn btn-secondary edit-debt"
+                        data-id="${debt.id}"
+                    >
+                        ✏️
+                    </button>
+
+                    <button
+                        class="btn btn-danger del-debt"
+                        data-id="${debt.id}"
+                    >
+                        ×
+                    </button>
+
+                </div>
 
             </div>
 
@@ -402,7 +420,7 @@ async function render(user) {
 
             <div class="modal">
 
-                <h2>
+                <h2 id="debtModalTitle">
                     ${t("add_debt")}
                 </h2>
 
@@ -486,6 +504,7 @@ async function render(user) {
                         </button>
 
                         <button
+                            id="debtSubmitBtn"
                             class="btn btn-primary"
                         >
                             ${t("save")}
@@ -532,20 +551,75 @@ async function render(user) {
      * Modal
      */
 
+    function openDebtModal(debt) {
+
+        editingId =
+            debt ? debt.id : null;
+
+
+        document.getElementById(
+            "debtModalTitle"
+        ).textContent =
+            debt ? t("edit_debt") : t("add_debt");
+
+
+        document.getElementById(
+            "debtSubmitBtn"
+        ).textContent =
+            debt ? t("save_changes") : t("save");
+
+
+        document.getElementById(
+            "debtPerson"
+        ).value =
+            debt ? debt.personName : "";
+
+        document.getElementById(
+            "debtType"
+        ).value =
+            debt ? debt.type : "owe";
+
+        document.getElementById(
+            "debtAmount"
+        ).value =
+            debt ? debt.amount : "";
+
+        document.getElementById(
+            "debtDueDate"
+        ).value =
+            debt ? (debt.dueDate || "") : "";
+
+        document.getElementById(
+            "debtNote"
+        ).value =
+            debt ? (debt.note || "") : "";
+
+
+        document
+            .getElementById("modal")
+            .classList.add("show");
+
+    }
+
+
     document.getElementById(
         "openDebt"
     ).onclick =
-        () => document
-            .getElementById("modal")
-            .classList.add("show");
+        () => openDebtModal(null);
 
 
     document.getElementById(
         "close"
     ).onclick =
-        () => document
-            .getElementById("modal")
-            .classList.remove("show");
+        () => {
+
+            editingId = null;
+
+            document
+                .getElementById("modal")
+                .classList.remove("show");
+
+        };
 
 
     document.getElementById(
@@ -556,51 +630,139 @@ async function render(user) {
             event.preventDefault();
 
 
-            await addDoc(
-                collection(
-                    db,
-                    "users",
-                    user.uid,
-                    "debts"
-                ),
-                {
+            const personName =
+                document.getElementById(
+                    "debtPerson"
+                ).value.trim();
 
-                    personName:
-                        document.getElementById(
-                            "debtPerson"
-                        ).value.trim(),
+            const type =
+                document.getElementById(
+                    "debtType"
+                ).value;
 
-                    type:
-                        document.getElementById(
-                            "debtType"
-                        ).value,
+            const amount =
+                Number(
+                    document.getElementById(
+                        "debtAmount"
+                    ).value
+                );
 
-                    amount:
+            const dueDate =
+                document.getElementById(
+                    "debtDueDate"
+                ).value;
+
+            const note =
+                document.getElementById(
+                    "debtNote"
+                ).value.trim();
+
+
+            if (editingId) {
+
+                const existing =
+                    debts.find(
+                        item =>
+                            item.id === editingId
+                    );
+
+                /*
+                 * If the total was lowered below
+                 * what's already been paid, clamp
+                 * paidAmount so the debt doesn't
+                 * end up "more than 100% paid".
+                 */
+
+                const clampedPaid =
+                    Math.min(
+                        amount,
                         Number(
-                            document.getElementById(
-                                "debtAmount"
-                            ).value
-                        ),
+                            existing.paidAmount || 0
+                        )
+                    );
 
-                    paidAmount: 0,
 
-                    dueDate:
-                        document.getElementById(
-                            "debtDueDate"
-                        ).value,
+                await updateDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid,
+                        "debts",
+                        editingId
+                    ),
+                    {
 
-                    note:
-                        document.getElementById(
-                            "debtNote"
-                        ).value.trim()
+                        personName,
+                        type,
+                        amount,
+                        dueDate,
+                        note,
 
-                }
-            );
+                        paidAmount: clampedPaid
 
+                    }
+                );
+
+            } else {
+
+                await addDoc(
+                    collection(
+                        db,
+                        "users",
+                        user.uid,
+                        "debts"
+                    ),
+                    {
+
+                        personName,
+                        type,
+                        amount,
+                        dueDate,
+                        note,
+
+                        paidAmount: 0
+
+                    }
+                );
+
+            }
+
+
+            editingId = null;
 
             render(user);
 
         };
+
+
+    /*
+     * Edit
+     */
+
+    document
+        .querySelectorAll(
+            ".edit-debt"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    () => {
+
+                        const debt =
+                            debts.find(
+                                item =>
+                                    item.id ===
+                                    button.dataset.id
+                            );
+
+
+                        openDebtModal(debt);
+
+                    };
+
+            }
+        );
 
 
     /*

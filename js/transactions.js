@@ -22,12 +22,21 @@ import {
     addDoc,
     deleteDoc,
     doc,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
 const { t } =
     await initI18n();
+
+
+/*
+ * null when adding a new transaction, otherwise the id of
+ * the transaction currently being edited.
+ */
+
+let editingId = null;
 
 
 authGuard(
@@ -56,6 +65,88 @@ authGuard(
 
     }
 );
+
+
+function updateCategoryVisibility() {
+
+    document.getElementById(
+        "catWrap"
+    ).style.display =
+        document.getElementById(
+            "txType"
+        ).value === "expense"
+            ? "block"
+            : "none";
+
+}
+
+
+function openTxModal(transaction) {
+
+    editingId =
+        transaction ? transaction.id : null;
+
+
+    document.getElementById(
+        "txModalTitle"
+    ).textContent =
+        transaction
+            ? t("edit_transaction")
+            : t("add_transaction");
+
+
+    document.getElementById(
+        "txSubmitBtn"
+    ).textContent =
+        transaction
+            ? t("save_changes")
+            : t("save");
+
+
+    document.getElementById(
+        "txType"
+    ).value =
+        transaction ? transaction.type : "expense";
+
+
+    document.getElementById(
+        "txAmount"
+    ).value =
+        transaction ? transaction.amount : "";
+
+
+    document.getElementById(
+        "txCategory"
+    ).value =
+        transaction && transaction.category
+            ? transaction.category
+            : "food";
+
+
+    document.getElementById(
+        "txDescription"
+    ).value =
+        transaction
+            ? (transaction.description || "")
+            : "";
+
+
+    document.getElementById(
+        "txDate"
+    ).value =
+        transaction
+            ? transaction.date
+            : new Date().toISOString().slice(0, 10);
+
+
+    updateCategoryVisibility();
+
+
+    document.getElementById(
+        "modal"
+    ).classList.add("show");
+
+}
 
 
 async function render(user) {
@@ -207,7 +298,7 @@ async function render(user) {
 
             <div class="modal">
 
-                <h2>
+                <h2 id="txModalTitle">
                     ${t("add_transaction")}
                 </h2>
 
@@ -351,6 +442,7 @@ async function render(user) {
                         </button>
 
                         <button
+                            id="txSubmitBtn"
                             class="btn btn-primary"
                         >
                             ${t("save")}
@@ -374,18 +466,14 @@ async function render(user) {
 
     document.getElementById(
         "openAdd"
-    ).onclick = () => {
-
-        document.getElementById(
-            "modal"
-        ).classList.add("show");
-
-    };
+    ).onclick = () => openTxModal(null);
 
 
     document.getElementById(
         "closeModal"
     ).onclick = () => {
+
+        editingId = null;
 
         document.getElementById(
             "modal"
@@ -413,17 +501,7 @@ async function render(user) {
     document.getElementById(
         "txType"
     ).onchange =
-        event => {
-
-            document.getElementById(
-                "catWrap"
-            ).style.display =
-                event.target.value ===
-                "expense"
-                    ? "block"
-                    : "none";
-
-        };
+        updateCategoryVisibility;
 
 
     document.getElementById(
@@ -434,37 +512,68 @@ async function render(user) {
             event.preventDefault();
 
 
-           const type = document.getElementById("txType").value;
+            const type =
+                document.getElementById("txType").value;
 
-await addDoc(
-    collection(
-        db,
-        "users",
-        user.uid,
-        "transactions"
-    ),
-    {
-        type,
-        amount: Number(
-            document.getElementById("txAmount").value
-        ),
+            const amount =
+                Number(
+                    document.getElementById("txAmount").value
+                );
 
-        // Category is only for expenses
-        category:
-            type === "expense"
-                ? document.getElementById("txCategory").value
-                : null,
+            const category =
+                type === "expense"
+                    ? document.getElementById("txCategory").value
+                    : null;
 
-        description:
-            document.getElementById("txDescription").value.trim(),
+            const description =
+                document.getElementById("txDescription").value.trim();
 
-        date:
-            document.getElementById("txDate").value,
+            const date =
+                document.getElementById("txDate").value;
 
-        createdAt: serverTimestamp()
-    }
-);
 
+            if (editingId) {
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid,
+                        "transactions",
+                        editingId
+                    ),
+                    {
+                        type,
+                        amount,
+                        category,
+                        description,
+                        date
+                    }
+                );
+
+            } else {
+
+                await addDoc(
+                    collection(
+                        db,
+                        "users",
+                        user.uid,
+                        "transactions"
+                    ),
+                    {
+                        type,
+                        amount,
+                        category,
+                        description,
+                        date,
+                        createdAt: serverTimestamp()
+                    }
+                );
+
+            }
+
+
+            editingId = null;
 
             document.getElementById(
                 "modal"
@@ -595,12 +704,23 @@ function drawTransactions(
 
                             <td>
 
-                                <button
-                                    class="btn btn-danger delete-btn"
-                                    data-id="${transaction.id}"
-                                >
-                                    ×
-                                </button>
+                                <div class="card-actions">
+
+                                    <button
+                                        class="btn btn-secondary edit-btn"
+                                        data-id="${transaction.id}"
+                                    >
+                                        ✏️
+                                    </button>
+
+                                    <button
+                                        class="btn btn-danger delete-btn"
+                                        data-id="${transaction.id}"
+                                    >
+                                        ×
+                                    </button>
+
+                                </div>
 
                             </td>
 
@@ -624,6 +744,32 @@ function drawTransactions(
                 </tr>
 
             `;
+
+
+    document
+        .querySelectorAll(
+            ".edit-btn"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    () => {
+
+                        const transaction =
+                            transactions.find(
+                                item =>
+                                    item.id ===
+                                    button.dataset.id
+                            );
+
+
+                        openTxModal(transaction);
+
+                    };
+
+            }
+        );
 
 
     document

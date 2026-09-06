@@ -20,12 +20,21 @@ import {
     collection,
     addDoc,
     deleteDoc,
-    doc
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
 const { t } =
     await initI18n();
+
+
+/*
+ * null when adding a new budget, otherwise the id of the
+ * budget currently being edited.
+ */
+
+let editingId = null;
 
 
 authGuard(
@@ -243,12 +252,23 @@ async function render(user) {
                                             </div>
 
 
-                                            <button
-                                                class="btn btn-danger del-budget"
-                                                data-id="${budget.id}"
-                                            >
-                                                ×
-                                            </button>
+                                            <div class="card-actions">
+
+                                                <button
+                                                    class="btn btn-secondary edit-budget"
+                                                    data-id="${budget.id}"
+                                                >
+                                                    ✏️
+                                                </button>
+
+                                                <button
+                                                    class="btn btn-danger del-budget"
+                                                    data-id="${budget.id}"
+                                                >
+                                                    ×
+                                                </button>
+
+                                            </div>
 
                                         </div>
 
@@ -279,7 +299,7 @@ async function render(user) {
 
             <div class="modal">
 
-                <h2>
+                <h2 id="budgetModalTitle">
                     ${t("add_budget")}
                 </h2>
 
@@ -355,6 +375,7 @@ async function render(user) {
                         </button>
 
                         <button
+                            id="budgetSubmitBtn"
                             class="btn btn-primary"
                         >
                             ${t("save")}
@@ -371,20 +392,60 @@ async function render(user) {
     `;
 
 
+    function openBudgetModal(budget) {
+
+        editingId =
+            budget ? budget.id : null;
+
+
+        document.getElementById(
+            "budgetModalTitle"
+        ).textContent =
+            budget ? t("edit_budget") : t("add_budget");
+
+
+        document.getElementById(
+            "budgetSubmitBtn"
+        ).textContent =
+            budget ? t("save_changes") : t("save");
+
+
+        document.getElementById(
+            "budgetCategory"
+        ).value =
+            budget ? budget.category : "food";
+
+        document.getElementById(
+            "budgetAmount"
+        ).value =
+            budget ? budget.amount : "";
+
+
+        document
+            .getElementById("modal")
+            .classList.add("show");
+
+    }
+
+
     document.getElementById(
         "openBudget"
     ).onclick =
-        () => document
-            .getElementById("modal")
-            .classList.add("show");
+        () => openBudgetModal(null);
 
 
     document.getElementById(
         "close"
     ).onclick =
-        () => document
-            .getElementById("modal")
-            .classList.remove("show");
+        () => {
+
+            editingId = null;
+
+            document
+                .getElementById("modal")
+                .classList.remove("show");
+
+        };
 
 
     document.getElementById(
@@ -395,38 +456,92 @@ async function render(user) {
             event.preventDefault();
 
 
-            await addDoc(
-                collection(
-                    db,
-                    "users",
-                    user.uid,
-                    "budgets"
-                ),
-                {
+            const category =
+                document.getElementById(
+                    "budgetCategory"
+                ).value;
 
-                    category:
-                        document.getElementById(
-                            "budgetCategory"
-                        ).value,
+            const amount =
+                Number(
+                    document.getElementById(
+                        "budgetAmount"
+                    ).value
+                );
 
-                    amount:
-                        Number(
-                            document.getElementById(
-                                "budgetAmount"
-                            ).value
-                        ),
 
-                    month,
+            if (editingId) {
 
-                    year
+                await updateDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid,
+                        "budgets",
+                        editingId
+                    ),
+                    {
 
-                }
-            );
+                        category,
+                        amount
 
+                    }
+                );
+
+            } else {
+
+                await addDoc(
+                    collection(
+                        db,
+                        "users",
+                        user.uid,
+                        "budgets"
+                    ),
+                    {
+
+                        category,
+                        amount,
+
+                        month,
+
+                        year
+
+                    }
+                );
+
+            }
+
+
+            editingId = null;
 
             render(user);
 
         };
+
+
+    document
+        .querySelectorAll(
+            ".edit-budget"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    () => {
+
+                        const budget =
+                            activeBudgets.find(
+                                item =>
+                                    item.id ===
+                                    button.dataset.id
+                            );
+
+
+                        openBudgetModal(budget);
+
+                    };
+
+            }
+        );
 
 
     document
@@ -439,18 +554,26 @@ async function render(user) {
                 button.onclick =
                     async () => {
 
-                        await deleteDoc(
-                            doc(
-                                db,
-                                "users",
-                                user.uid,
-                                "budgets",
-                                button.dataset.id
+                        if (
+                            confirm(
+                                t("confirm_delete")
                             )
-                        );
+                        ) {
+
+                            await deleteDoc(
+                                doc(
+                                    db,
+                                    "users",
+                                    user.uid,
+                                    "budgets",
+                                    button.dataset.id
+                                )
+                            );
 
 
-                        render(user);
+                            render(user);
+
+                        }
 
                     };
 
