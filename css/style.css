@@ -721,6 +721,18 @@ a {
     border-radius: 18px;
 
     padding: 24px;
+
+    /* Never taller than the visible screen; scroll inside.
+       100vh is taller than the visible area on iOS Safari,
+       so dvh (dynamic viewport height) is used when supported. */
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .modal h2 {
@@ -735,6 +747,31 @@ a {
     gap: 8px;
 
     margin-top: 18px;
+
+    /* Keep Save / Cancel visible while the form scrolls */
+    position: sticky;
+
+    bottom: 0;
+
+    background: white;
+
+    padding: 12px 0 2px;
+
+    box-shadow: 0 -10px 10px -10px rgba(15, 20, 35, 0.18);
+}
+
+.modal input[type="date"] {
+    display: block;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 46px;
+
+    -webkit-appearance: none;
+
+    appearance: none;
 }
 
 .form-grid {
@@ -1067,20 +1104,34 @@ a {
        Modal
        ------------------------- */
 
+    .modal-backdrop {
+        padding: 12px;
+
+        padding-top: calc(12px + env(safe-area-inset-top, 0px));
+
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
     .modal {
         width: 100%;
 
         max-width: 100%;
 
         max-height: calc(
-            100vh - 130px - env(safe-area-inset-bottom, 0px)
+            100vh - 24px - env(safe-area-inset-top, 0px) -
+            env(safe-area-inset-bottom, 0px)
+        );
+
+        max-height: calc(
+            100dvh - 24px - env(safe-area-inset-top, 0px) -
+            env(safe-area-inset-bottom, 0px)
         );
 
         overflow-y: auto;
 
         border-radius: 16px;
 
-        padding: 12px;
+        padding: 16px;
     }
 
 
