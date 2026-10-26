@@ -20,8 +20,14 @@ import {
     initI18n
 } from "./i18n.js";
 
+import {
+    mountAuthInstallButton
+} from "./common.js";
+
 
 await initI18n();
+
+mountAuthInstallButton();
 
 
 document

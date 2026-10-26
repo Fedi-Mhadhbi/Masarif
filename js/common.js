@@ -318,7 +318,7 @@ export function buildShell(
                         </span>
 
                         <span>
-                            ${t("install_app")}
+                            ${installLabel()}
                         </span>
 
                     </button>
@@ -366,8 +366,8 @@ export function buildShell(
                             id="installAppBtnMobile"
                             class="btn btn-primary install-btn-mobile"
                             style="display:none"
-                            aria-label="${t("install_app")}"
-                            title="${t("install_app")}"
+                            aria-label="${installLabel()}"
+                            title="${installLabel()}"
                         >
                             📲
                         </button>
@@ -503,43 +503,20 @@ export function buildShell(
 
 
     /*
-     * If the app is already installed,
-     * don't show either install button.
+     * Show the install buttons unless the app is already
+     * installed. Android Chrome only fires "beforeinstallprompt"
+     * in some situations (and never on iOS), so the buttons are
+     * always offered on touch devices, with step-by-step
+     * instructions as the fallback.
      */
 
-    const isStandalone =
-        window.matchMedia(
-            "(display-mode: standalone)"
-        ).matches ||
-        window.navigator.standalone === true;
+    if (isStandaloneMode()) {
 
+        hideInstallButtons();
 
-    if (isStandalone) {
+    } else if (shouldOfferInstall()) {
 
-        [installButton, installButtonMobile]
-            .filter(Boolean)
-            .forEach(button => {
-
-                button.style.display =
-                    "none";
-
-            });
-
-    } else if (isIos()) {
-
-        /*
-         * iOS/iPadOS Safari never fires
-         * "beforeinstallprompt", so show the
-         * mobile button right away; tapping it
-         * shows manual "Add to Home Screen" steps.
-         */
-
-        if (installButtonMobile) {
-
-            installButtonMobile.style.display =
-                "inline-flex";
-
-        }
+        showInstallButton();
 
     }
 
@@ -694,45 +671,98 @@ export function calcTotals(
  * =========================================
  */
 
-if (
-    "serviceWorker" in navigator
-) {
+export function registerServiceWorker() {
 
-    window.addEventListener(
-        "load",
+    if (!("serviceWorker" in navigator)) {
+
+        return;
+
+    }
+
+
+    const hadController =
+        Boolean(navigator.serviceWorker.controller);
+
+    let reloaded = false;
+
+
+    /*
+     * When a NEW service worker takes over (after you
+     * deploy an update), reload once so the page runs the
+     * fresh files. Skipped on the very first install.
+     */
+
+    navigator.serviceWorker.addEventListener(
+        "controllerchange",
         () => {
 
-            navigator.serviceWorker
-                .register(
-                    "./service_worker.js"
-                )
+            if (!hadController || reloaded) {
 
-                .then(
-                    registration => {
+                return;
 
-                        console.log(
-                            "Service Worker registered:",
-                            registration.scope
-                        );
+            }
 
-                    }
-                )
+            reloaded = true;
 
-                .catch(
-                    error => {
-
-                        console.error(
-                            "Service Worker registration failed:",
-                            error
-                        );
-
-                    }
-                );
+            location.reload();
 
         }
     );
 
+
+    const register = () => {
+
+        navigator.serviceWorker
+            .register(
+                "./service_worker.js",
+                { updateViaCache: "none" }
+            )
+            .then(
+                registration => {
+
+                    console.log(
+                        "Service Worker registered:",
+                        registration.scope
+                    );
+
+                    registration.update();
+
+                }
+            )
+            .catch(
+                error => {
+
+                    console.error(
+                        "Service Worker registration failed:",
+                        error
+                    );
+
+                }
+            );
+
+    };
+
+
+    if (document.readyState === "complete") {
+
+        register();
+
+    } else {
+
+        window.addEventListener("load", register);
+
+    }
+
 }
+
+
+/*
+ * Runs on every page that imports common.js — including
+ * login/register (via auth.js), so the app is installable
+ * even before the first login.
+ */
+
+registerServiceWorker();
 
 
 /*
@@ -776,6 +806,10 @@ function getInstallButtons() {
 
         document.getElementById(
             "installAppBtnMobile"
+        ),
+
+        document.getElementById(
+            "installAuthBtn"
         )
 
     ].filter(Boolean);
@@ -790,12 +824,7 @@ function showInstallButton() {
      * app is already installed.
      */
 
-    if (
-        window.matchMedia(
-            "(display-mode: standalone)"
-        ).matches ||
-        window.navigator.standalone === true
-    ) {
+    if (isStandaloneMode()) {
 
         return;
 
@@ -843,55 +872,193 @@ function isIos() {
 }
 
 
-function showIosInstallInstructions() {
+const INSTALL_TEXT = {
 
-    const existing =
+    en: {
+        label: "Install app",
+        title: "📲 Add to Home Screen",
+        close: "Got it",
+        iosIntro:
+            "Safari doesn't let websites start the installation " +
+            "directly. Just a few taps:",
+        iosSteps: [
+            "Tap the <strong>Share</strong> button (the square with an arrow) in Safari's toolbar.",
+            "Scroll down and tap <strong>Add to Home Screen</strong>.",
+            "Tap <strong>Add</strong> in the top corner."
+        ],
+        androidIntro:
+            "Your browser didn't offer the one-tap install, " +
+            "but you can add the app manually:",
+        androidSteps: [
+            "Tap the <strong>⋮</strong> menu in the top corner of Chrome.",
+            "Tap <strong>Install app</strong> or <strong>Add to Home screen</strong>.",
+            "Confirm with <strong>Install</strong> / <strong>Add</strong>."
+        ],
+        androidHint:
+            "Can't see it? Turn OFF <strong>Desktop site</strong> in " +
+            "the same menu, reload the page, then open the menu again."
+    },
+
+    fr: {
+        label: "Installer l'app",
+        title: "📲 Ajouter à l'écran d'accueil",
+        close: "Compris",
+        iosIntro:
+            "Safari ne permet pas aux sites de lancer l'installation " +
+            "directement. Quelques appuis suffisent :",
+        iosSteps: [
+            "Appuyez sur le bouton <strong>Partager</strong> (le carré avec une flèche) dans la barre de Safari.",
+            "Faites défiler et appuyez sur <strong>Sur l'écran d'accueil</strong>.",
+            "Appuyez sur <strong>Ajouter</strong> en haut."
+        ],
+        androidIntro:
+            "Votre navigateur n'a pas proposé l'installation en un clic, " +
+            "mais vous pouvez ajouter l'application manuellement :",
+        androidSteps: [
+            "Appuyez sur le menu <strong>⋮</strong> en haut de Chrome.",
+            "Appuyez sur <strong>Installer l'application</strong> ou <strong>Ajouter à l'écran d'accueil</strong>.",
+            "Confirmez avec <strong>Installer</strong> / <strong>Ajouter</strong>."
+        ],
+        androidHint:
+            "Vous ne le voyez pas ? Désactivez <strong>Version ordinateur</strong> " +
+            "dans le même menu, rechargez la page, puis rouvrez le menu."
+    },
+
+    ar: {
+        label: "تثبيت التطبيق",
+        title: "📲 إضافة إلى الشاشة الرئيسية",
+        close: "حسنًا",
+        iosIntro:
+            "لا يسمح Safari للمواقع ببدء التثبيت مباشرة. " +
+            "فقط بضع ضغطات:",
+        iosSteps: [
+            "اضغط على زر <strong>المشاركة</strong> (المربع مع السهم) في شريط Safari.",
+            "مرّر للأسفل واضغط على <strong>إضافة إلى الشاشة الرئيسية</strong>.",
+            "اضغط على <strong>إضافة</strong> في الأعلى."
+        ],
+        androidIntro:
+            "لم يعرض المتصفح التثبيت بضغطة واحدة، " +
+            "لكن يمكنك إضافة التطبيق يدويًا:",
+        androidSteps: [
+            "اضغط على قائمة <strong>⋮</strong> في أعلى متصفح Chrome.",
+            "اختر <strong>تثبيت التطبيق</strong> أو <strong>إضافة إلى الشاشة الرئيسية</strong>.",
+            "أكّد بالضغط على <strong>تثبيت</strong> / <strong>إضافة</strong>."
+        ],
+        androidHint:
+            "لا تجدها؟ ألغِ تفعيل <strong>موقع سطح المكتب</strong> " +
+            "من نفس القائمة، ثم أعد تحميل الصفحة وافتح القائمة مجددًا."
+    }
+
+};
+
+
+function installText() {
+
+    return (
+        INSTALL_TEXT[getCurrentLanguage()] ||
+        INSTALL_TEXT.en
+    );
+
+}
+
+
+function installLabel() {
+
+    return installText().label;
+
+}
+
+
+function isStandaloneMode() {
+
+    return (
+        window.matchMedia(
+            "(display-mode: standalone)"
+        ).matches ||
+        window.navigator.standalone === true
+    );
+
+}
+
+
+/*
+ * Touch devices (phones/tablets — including Android Chrome
+ * in "Desktop site" mode) or whenever Chrome already gave us
+ * the native install prompt.
+ */
+
+function shouldOfferInstall() {
+
+    return (
+        Boolean(deferredInstallPrompt) ||
+        isIos() ||
+        /android/i.test(navigator.userAgent) ||
+        navigator.maxTouchPoints > 1
+    );
+
+}
+
+
+function showInstallInstructions() {
+
+    const text = installText();
+
+    const ios = isIos();
+
+    const steps =
+        ios ? text.iosSteps : text.androidSteps;
+
+    const intro =
+        ios ? text.iosIntro : text.androidIntro;
+
+
+    let modal =
         document.getElementById(
-            "iosInstallModal"
+            "installInstructionsModal"
         );
 
+    if (modal) {
 
-    if (existing) {
-
-        existing.classList.add("show");
-
-        return;
+        modal.remove();
 
     }
 
 
-    const modal =
-        document.createElement("div");
+    modal = document.createElement("div");
 
-    modal.id = "iosInstallModal";
+    modal.id = "installInstructionsModal";
+
     modal.className = "modal-backdrop show";
 
     modal.innerHTML = `
 
         <div class="modal">
 
-            <h2>📲 Add to Home Screen</h2>
+            <h2>${text.title}</h2>
 
             <p class="muted" style="margin-bottom:14px">
-                iPhone and iPad don't let apps trigger the
-                install prompt directly. Just a couple of taps:
+                ${intro}
             </p>
 
-            <ol style="margin:0 0 18px 18px; display:grid; gap:8px">
-                <li>Tap the <strong>Share</strong> button
-                    (the square with an arrow) in Safari's toolbar.</li>
-                <li>Scroll down and tap
-                    <strong>Add to Home Screen</strong>.</li>
-                <li>Tap <strong>Add</strong> in the top-right corner.</li>
+            <ol style="margin:0 18px 14px; display:grid; gap:8px">
+                ${steps.map(step => `<li>${step}</li>`).join("")}
             </ol>
+
+            ${
+                ios
+                    ? ""
+                    : `<p class="small" style="margin-bottom:6px">
+                           💡 ${text.androidHint}
+                       </p>`
+            }
 
             <div class="modal-actions">
                 <button
                     type="button"
-                    id="closeIosInstallModal"
+                    id="closeInstallInstructions"
                     class="btn btn-primary"
                 >
-                    Got it
+                    ${text.close}
                 </button>
             </div>
 
@@ -903,12 +1070,12 @@ function showIosInstallInstructions() {
     document.body.appendChild(modal);
 
 
+    const close = () => modal.remove();
+
+
     modal
-        .querySelector("#closeIosInstallModal")
-        .addEventListener(
-            "click",
-            () => modal.classList.remove("show")
-        );
+        .querySelector("#closeInstallInstructions")
+        .addEventListener("click", close);
 
 
     modal.addEventListener(
@@ -917,7 +1084,7 @@ function showIosInstallInstructions() {
 
             if (event.target === modal) {
 
-                modal.classList.remove("show");
+                close();
 
             }
 
@@ -930,67 +1097,101 @@ function showIosInstallInstructions() {
 export async function installApp() {
 
     /*
-     * iOS/iPadOS Safari never supports the
-     * native install prompt — show manual steps.
+     * Chrome handed us the native prompt:
+     * one-tap install.
      */
 
-    if (isIos()) {
+    if (deferredInstallPrompt) {
 
-        showIosInstallInstructions();
+        deferredInstallPrompt.prompt();
 
-        return;
+        const result =
+            await deferredInstallPrompt.userChoice;
 
-    }
-
-
-    /*
-     * If the browser doesn't support
-     * the install prompt (and isn't iOS).
-     */
-
-    if (!deferredInstallPrompt) {
-
-        alert(
-            "Installation is not currently available. " +
-            "Please use your browser's 'Add to Home Screen' option."
+        console.log(
+            "Install result:",
+            result.outcome
         );
 
+        /*
+         * The prompt can only be used once.
+         */
+
+        deferredInstallPrompt = null;
+
+        if (result.outcome === "accepted") {
+
+            hideInstallButtons();
+
+        }
+
         return;
 
     }
 
 
     /*
-     * Show browser installation dialog.
+     * No native prompt available (iOS Safari, Android
+     * Chrome in "Desktop site" mode, or Chrome hasn't
+     * decided the app is installable yet): show the
+     * manual "Add to Home Screen" steps.
      */
 
-    deferredInstallPrompt.prompt();
+    showInstallInstructions();
+
+}
 
 
-    const result =
-        await deferredInstallPrompt.userChoice;
+/*
+ * Adds an "Install app" button to the login/register card
+ * so people can install the app before they even sign in.
+ */
+
+export function mountAuthInstallButton() {
+
+    if (isStandaloneMode()) {
+
+        return;
+
+    }
+
+    if (document.getElementById("installAuthBtn")) {
+
+        return;
+
+    }
+
+    const card =
+        document.querySelector(".auth-card");
+
+    if (!card) {
+
+        return;
+
+    }
 
 
-    console.log(
-        "Install result:",
-        result.outcome
+    const button =
+        document.createElement("button");
+
+    button.id = "installAuthBtn";
+
+    button.type = "button";
+
+    button.className =
+        "btn btn-secondary full";
+
+    button.style.marginTop = "14px";
+
+    button.textContent =
+        `📲 ${installLabel()}`;
+
+    button.addEventListener(
+        "click",
+        installApp
     );
 
-
-    /*
-     * The prompt can only be used once.
-     */
-
-    deferredInstallPrompt =
-        null;
-
-
-    /*
-     * Hide buttons after installation
-     * or cancellation.
-     */
-
-    hideInstallButtons();
+    card.appendChild(button);
 
 }
 
